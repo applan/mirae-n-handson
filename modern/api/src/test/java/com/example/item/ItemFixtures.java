@@ -20,7 +20,12 @@ final class ItemFixtures {
     }
 
     static Item item(Integer id, Unit unit, String title, int level, String status, Tag... tags) {
-        Item item = new Item(unit, title, title + " 문제 본문", level, status, SEED_TIME);
+        return item(id, unit, title, level, status, SEED_TIME, tags);
+    }
+
+    static Item item(Integer id, Unit unit, String title, int level, String status, LocalDateTime createdAt,
+                     Tag... tags) {
+        Item item = new Item(unit, title, title + " 문제 본문", level, status, createdAt);
         for (Tag tag : tags) {
             item.addTag(tag);
         }

@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew test)",
+      "Bash(./gradlew test *)",
+      "Bash(npm test)",
+      "Bash(npm test *)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(npx vitest run *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./**/.env)",
+      "Edit(./legacy/**)",
+      "Write(./legacy/**)",
+      "Edit(./characterization/__snapshots__/**)",
+      "Write(./characterization/__snapshots__/**)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(npm install *)"
+    ]
+  }
+}

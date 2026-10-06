@@ -36,3 +36,23 @@
 | 4 | 이관 검증 리포트 | `docs/verify/migration-review-2.md` |
 | 5 | PR 자동 리뷰 워크플로 · 코멘트 | 내 포크 Actions `Claude Auto Review` · PR 코멘트 |
 | 6 | 2차 검증 미해소 항목 정리 | `docs/verify/migration-review-2.md` 이슈 #1 ~ #4 |
+
+## 범위 조정 (4회차)
+
+> 2026-10-06 승인. 완성 기준 ① · ② 는 이미 증거가 있다(동작 보존 테스트 레거시 30 통과 · 새 API 29 통과 1 건너뜀, PR https://github.com/applan/mirae-n-handson/pull/1). 남은 일은 2차 검증 미해소 항목(`docs/verify/migration-review-2.md:56-59`, 전부 경고 · 제안)이다.
+
+### 남긴다
+
+1. 이슈 #3 — `ItemSearchService` 의 `byId::get` NPE 방어. 목록에 없는 id 는 건너뛰고, 그 경우를 서비스 테스트 1개로 고정한다.
+   - 확인: `cd modern/api && ./gradlew test` 통과, 동작 보존 테스트 2회 통과
+2. 트랙 확인 명령 전체 재실행
+   - 확인: `cd characterization && npm test` · `TARGET_BASE_URL=http://localhost:8080 npm test` · `cd modern/api && ./gradlew test`
+
+### 뺀다
+
+- 이슈 #2 경고 문구 이관 — 응답에 `warnings` 필드가 필요해 스냅샷 영향이 생길 수 있다(스냅샷 변경은 먼저 사람에게 묻는 규칙). 응답 모양 · 스냅샷이 그대로라 완성 기준 ① 은 유지된다.
+- 이슈 #4 WHERE 중복 리팩터링 — 동작 변화가 없는 정리 작업이라 완성 기준 ① · ② 에 영향이 없다.
+
+### 교육 후로 미룬다
+
+- 이슈 #1 범위 밖 파일 분리 — 1~3회차 커밋 이력 재구성이 필요하다. 오늘 검증 범위(`day4-start..HEAD`)에 들어오지 않는다.

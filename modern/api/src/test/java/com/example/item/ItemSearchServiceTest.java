@@ -59,6 +59,22 @@ class ItemSearchServiceTest {
     }
 
     @Test
+    @DisplayName("search: 상세 조회에서 빠진 id 는 행에서 건너뛴다")
+    void searchSkipsIdsMissingFromDetails() {
+        Pageable pageable = PageRequest.of(0, ItemSearchCondition.PAGE_SIZE);
+        when(itemRepository.searchIds(eq(ItemStatus.ACTIVE), isNull(), eq("M5-1"), eq(1),
+            eq(ItemSearchCondition.LEVEL_DEFAULT_CAP), isNull(), any(Pageable.class)))
+            .thenReturn(new PageImpl<>(List.of(2, 1), pageable, 2));
+        Item first = ItemFixtures.item(1, unit, "분모가 같은 분수의 덧셈", 1, ItemStatus.ACTIVE);
+        when(itemRepository.findWithDetailsByIdIn(List.of(2, 1))).thenReturn(List.of(first));
+
+        ItemSearchResponse response = itemSearchService.search(params("M5-1", "1", "1"));
+
+        assertThat(response.rows()).containsExactly(
+            new ItemSearchRow(1, "분모가 같은 분수의 덧셈", "M5-1", 1, List.of()));
+    }
+
+    @Test
     @DisplayName("search: 전체 0건이면 \"검색 결과가 없습니다\"(BR-23), 404 가 아니다")
     void searchWithNoResultReturnsMessage() {
         when(itemRepository.searchIds(eq(ItemStatus.ACTIVE), isNull(), eq("Z99-99"), isNull(),

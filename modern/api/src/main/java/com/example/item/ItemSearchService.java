@@ -2,6 +2,7 @@ package com.example.item;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -48,7 +49,8 @@ public class ItemSearchService {
         if (!ids.isEmpty()) {
             Map<Integer, Item> byId = itemRepository.findWithDetailsByIdIn(ids).stream()
                 .collect(Collectors.toMap(Item::getId, Function.identity()));
-            rows = ids.stream().map(byId::get).map(ItemSearchRow::from).toList();
+            // id 조회와 상세 조회 사이에 사라진 문항은 건너뛴다(docs/verify/migration-review-2.md 이슈 #3).
+            rows = ids.stream().map(byId::get).filter(Objects::nonNull).map(ItemSearchRow::from).toList();
         }
         log.debug("item search page={} rows={} total={}", condition.page(), rows.size(), page.getTotalElements());
         return ItemSearchResponse.of(rows, page.getTotalElements());

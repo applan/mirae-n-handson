@@ -72,6 +72,8 @@ class ItemSearchServiceTest {
 
         assertThat(response.rows()).containsExactly(
             new ItemSearchRow(1, "분모가 같은 분수의 덧셈", "M5-1", 1, List.of()));
+        assertThat(response.count()).isEqualTo(2);
+        assertThat(response.message()).isNull();
     }
 
     @Test

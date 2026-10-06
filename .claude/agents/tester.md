@@ -29,7 +29,7 @@ model: inherit
 | 이관 코드 | `cd characterization && npm test` 와 `TARGET_BASE_URL=http://localhost:8080 npm test` |
 
 - `--rerun` 을 빼지 않는다. `UP-TO-DATE` 는 이전 결과를 다시 보여 줄 뿐이다.
-- 8080 대상 실행 전에 `ps -eo pid,lstart,args | grep '[I]temBankApplication'` 로 서버 시작 시각을 보고, 마지막 소스 변경(`git log -1 --format=%cd`, 미커밋이면 파일 수정 시각)보다 이르면 실행하지 않는다. "서버 재기동 필요"로 보고하고 멈춘다. 서버를 직접 끄거나 띄우지 않는다.
+- 8080 대상 실행 전에 `ps -eo pid,lstart,args | grep '[I]temBankApplication'` 로 서버 시작 시각을 보고, 범위에서 바뀐 `modern/api/src/main` 파일의 수정 시각(`stat -c %y <파일>`) 중 가장 늦은 것보다 이르면 실행하지 않는다. 커밋 시각은 쓰지 않는다(보통 수정 · 테스트 뒤에 커밋하므로 항상 서버보다 늦다). "서버 재기동 필요"로 보고하고 멈춘다. 서버를 직접 끄거나 띄우지 않는다.
 - 결과는 `build/test-results/test/*.xml` 에서 tests · failures · errors · skipped 를 합쳐 숫자로 남긴다. 전체 로그는 싣지 않는다.
 
 ## 4. 보고

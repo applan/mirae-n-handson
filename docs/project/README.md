@@ -1,3 +1,19 @@
+# 실전 프로젝트 — 백엔드 / 최민수
+
+## 무엇을 자동화하는가
+
 레거시 문항 검색 `legacy/item-bank-php/search.php` 를 옮긴 `GET /api/items/search` 가 Day 1-3 입력 케이스 16개(`characterization/tests/item-bank.test.js`)에서 레거시(8081)와 같은 응답을 내는지 스냅샷으로 비교하고 이관 모듈 단위 테스트를 돌리며, PR 변경은 `/verify` Skill 과 포크 `origin/main` 의 `.github/workflows/pr-review.yml`(Claude Auto Review) 코멘트로 검증한다.
-레거시(8081)와 새 API(8080)가 떠 있는 상태에서 저장소 루트에서 `(cd characterization && npm test && TARGET_BASE_URL=http://localhost:8080 npm test) && (cd modern/api && ./gradlew test --rerun)` (2026-10-20 결과: 30 passed · 29 passed 1 skipped · BUILD SUCCESSFUL 64개, `docs/project/CHECK.md` 1번)
+
+## 어떻게 실행하는가
+
+레거시(8081)와 새 API(8080)가 떠 있는 상태에서 저장소 루트에서 실행한다.
+
+```bash
+(cd characterization && npm test && TARGET_BASE_URL=http://localhost:8080 npm test) && (cd modern/api && ./gradlew test --rerun)
+```
+
+2026-10-20 결과: 30 passed · 29 passed 1 skipped · BUILD SUCCESSFUL 64개 (`docs/project/CHECK.md` 1번)
+
+## 알려진 한계와 현업에 옮길 때 바꿔야 할 것
+
 레거시 경고 문구(100자 초과 · 한 글자 키워드 · 와일드카드)는 이관하지 않았고 의심 동작(`docs/verify/migration-review-2.md:61-65`)은 그대로 두었으며 자동 리뷰 워크플로는 `day03` 작업 트리에 없으므로, 현업에 옮길 때는 대상 주소 · 경로 대응표(`characterization/lib/target.mjs` 의 `DEFAULT_BASE_URLS` · `PATH_ALIASES`), 워크플로 파일 추가, 리뷰 인증(`CLAUDE_CODE_OAUTH_TOKEN` → 조직 `ANTHROPIC_API_KEY`)을 바꿔야 한다.
